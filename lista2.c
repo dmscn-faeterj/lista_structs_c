@@ -41,7 +41,7 @@ int main() {
 	Ficha agenda[TAM];
 	FILE *arq;
 
-	arq = fopen(); // todo
+	arq = fopen("arq.dat", "r");
 
 	
 	imprimeFicha(agenda, TAM);
@@ -49,6 +49,34 @@ int main() {
 	return 0;
 }
 
+void lerArq(FILE *arq, Ficha agenda[], int tam) {
+	int i, q, linhas;
+
+	fscanf(arq, "%d %d\n", &q, &linhas);
+
+	for(i=0; i<q; i++) {
+		fscanf(arq, "%s\n", agenda[i].nome);
+		fscanf(arq, "%s\n", agenda[i].email);
+
+		fscanf(arq, "%s\n", agenda[i].endereco.rua);
+		fscanf(arq, "%s\n", agenda[i].endereco.num);
+		fscanf(arq, "%s\n", agenda[i].endereco.comp);
+		fscanf(arq, "%s\n", agenda[i].endereco.bairro);
+		fscanf(arq, "%s\n", agenda[i].endereco.cep);
+		fscanf(arq, "%s\n", agenda[i].endereco.cidade);
+		fscanf(arq, "%s\n", agenda[i].endereco.estado);
+		fscanf(arq, "%s\n", agenda[i].endereco.pais);
+
+		fscanf(arq, "%s\n", agenda[i].telefone);
+
+		fscanf(arq, "%s\n", agenda[i].nasc.dia);
+		fscanf(arq, "%s\n", agenda[i].nasc.mes);
+		fscanf(arq, "%s\n", agenda[i].nasc.ano);
+
+		fscanf(arq, "%s\n", agenda[i].obs);
+
+	}
+}
 
 void imprimeFicha(Ficha agenda[], int tam) {
 	int i;
