@@ -34,74 +34,87 @@ typedef struct {
 } Ficha;
 
 // preenche a agenda
-void preencheStructs(Ficha *agenda, int tam);
-void imprimeFicha(Ficha agenda, int tam);
+void preencheStructs(Ficha agenda[], int tam);
+void imprimeFicha(Ficha agenda[], int tam);
 
 int main() {
 	Ficha agenda[TAM];
 
-	preencheStructs(&agenda, TAM);
+	preencheStructs(agenda, TAM);
 	imprimeFicha(agenda, TAM);
 
 	return 0;
 }
 
-void preencheStructs(Ficha *agenda, int tam) {
+void preencheStructs(Ficha agenda[], int tam) {
 	int i;
 
 	for(i=0; i<tam; i++) {
 
 		__fpurge(stdin);
-
+		
 		printf("Entre com seu nome:\n");
-		fgets((*agenda).nome, sizeof((*agenda).nome), stdin);
+		fgets(agenda[i].nome, sizeof(agenda[i].nome), stdin);
+		__fpurge(stdin);
 
 		printf("Entre com seu email:\n");
-		fgets((*agenda).email, sizeof((*agenda).email), stdin);
+		fgets(agenda[i].email, sizeof(agenda[i].email), stdin);
+		__fpurge(stdin);
 
 		// endereco
 		printf("Rua:\n");
-		fgets((*agenda).endereco.rua, sizeof((*agenda).endereco.rua), stdin);
+		fgets(agenda[i].endereco.rua, sizeof(agenda[i].endereco.rua), stdin);
+		__fpurge(stdin);
 
 		printf("Numero:\n");
-		fgets((*agenda).endereco.num, sizeof((*agenda).endereco.num), stdin);
+		fgets(agenda[i].endereco.num, sizeof(agenda[i].endereco.num), stdin);
+		__fpurge(stdin);
 
 		printf("Complemento:\n");
-		fgets((*agenda).endereco.comp, sizeof((*agenda).endereco.comp), stdin);
+		fgets(agenda[i].endereco.comp, sizeof(agenda[i].endereco.comp), stdin);
+		__fpurge(stdin);
 
 		printf("Bairro:\n");
-		fgets((*agenda).endereco.bairro, sizeof((*agenda).endereco.bairro), stdin);
+		fgets(agenda[i].endereco.bairro, sizeof(agenda[i].endereco.bairro), stdin);
+		__fpurge(stdin);
 
 		printf("CEP:\n");
-		fgets((*agenda).endereco.cep, sizeof((*agenda).endereco.cep), stdin);
+		fgets(agenda[i].endereco.cep, sizeof(agenda[i].endereco.cep), stdin);
+		__fpurge(stdin);
 
 		printf("Cidade:\n");
-		fgets((*agenda).endereco.cidade, sizeof((*agenda).endereco.cidade), stdin);
+		fgets(agenda[i].endereco.cidade, sizeof(agenda[i].endereco.cidade), stdin);
+		__fpurge(stdin);
 
 		printf("Estado:\n");
-		fgets((*agenda).endereco.estado, sizeof((*agenda).endereco.estado), stdin);
+		fgets(agenda[i].endereco.estado, sizeof(agenda[i].endereco.estado), stdin);
+		__fpurge(stdin);
 
 		printf("Pais:\n");
-		fgets((*agenda).endereco.pais, sizeof((*agenda).endereco.pais), stdin);
+		fgets(agenda[i].endereco.pais, sizeof(agenda[i].endereco.pais), stdin);
+		__fpurge(stdin);
 		// fim endereco
 
 		printf("Telefone:\n");
-		fgets((*agenda).telefone, sizeof((*agenda).telefone), stdin);
+		fgets(agenda[i].telefone, sizeof(agenda[i].telefone), stdin);
+		__fpurge(stdin);
 
 		printf("Entre com seu aniversario:\n");
-		fgets((*agenda).nasc.dia, sizeof((*agenda).nasc.dia), stdin);
-		fgets((*agenda).nasc.mes, sizeof((*agenda).nasc.mes), stdin);
-		fgets((*agenda).nasc.ano, sizeof((*agenda).nasc.dia), stdin);
+		fgets(agenda[i].nasc.dia, sizeof(agenda[i].nasc.dia), stdin);
+		fgets(agenda[i].nasc.mes, sizeof(agenda[i].nasc.mes), stdin);
+		fgets(agenda[i].nasc.ano, sizeof(agenda[i].nasc.dia), stdin);
+		__fpurge(stdin);
 
 		printf("Observações:\n");
-		fgets((*agenda).obs, sizeof((*agenda).obs), stdin);
+		fgets(agenda[i].obs, sizeof(agenda[i].obs), stdin);
+		__fpurge(stdin);
 
 		printf("\n");
 
 	}
 }
 
-void imprimeFicha(Ficha agenda, int tam) {
+void imprimeFicha(Ficha agenda[], int tam) {
 	int i;
 
 	for(i=0; i<tam; i++) {
@@ -119,7 +132,7 @@ void imprimeFicha(Ficha agenda, int tam) {
 		printf("%s\n", agenda[i].endereco.estado);
 		printf("%s\n", agenda[i].endereco.pais);
 		printf("%s\n", agenda[i].telefone);
-		printf("%s/%s/%s\n", agenda[i].data.dia, agenda[i].data.mes, agenda[i].data.ano);
+		printf("%s/%s/%s\n", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
 		printf("%s\n", agenda[i].obs);
 	}
 }
