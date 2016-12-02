@@ -2,7 +2,7 @@
 #include <stdio_ext.h>
 #include <string.h>
 
-#define TAM 100
+#define TAM 1
 
 typedef struct {
 	char rua[20];
@@ -35,9 +35,13 @@ typedef struct {
 
 // preenche a agenda
 void preencheStructs(Ficha *agenda, int tam);
+void imprimeFicha(Ficha agenda, int tam);
 
 int main() {
 	Ficha agenda[TAM];
+
+	preencheStructs(&agenda, TAM);
+	imprimeFicha(agenda, TAM);
 
 	return 0;
 }
@@ -94,5 +98,28 @@ void preencheStructs(Ficha *agenda, int tam) {
 
 		printf("\n");
 
+	}
+}
+
+void imprimeFicha(Ficha agenda, int tam) {
+	int i;
+
+	for(i=0; i<tam; i++) {
+
+		printf("\n");
+
+		printf("%s\n", agenda[i].nome);
+		printf("%s\n", agenda[i].email);
+		printf("%s\n", agenda[i].endereco.rua);
+		printf("%s\n", agenda[i].endereco.num);
+		printf("%s\n", agenda[i].endereco.comp);
+		printf("%s\n", agenda[i].endereco.bairro);
+		printf("%s\n", agenda[i].endereco.cep);
+		printf("%s\n", agenda[i].endereco.cidade);
+		printf("%s\n", agenda[i].endereco.estado);
+		printf("%s\n", agenda[i].endereco.pais);
+		printf("%s\n", agenda[i].telefone);
+		printf("%s/%s/%s\n", agenda[i].data.dia, agenda[i].data.mes, agenda[i].data.ano);
+		printf("%s\n", agenda[i].obs);
 	}
 }
