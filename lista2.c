@@ -4,13 +4,13 @@
 
 typedef struct {
 	char rua[20];
-	char num[4];
+	char num[5];
 	char comp[20];
-	char bairro[10];
-	char cep[8];
-	char cidade[10];
-	char estado[2];
-	char pais[10];
+	char bairro[15];
+	char cep[10];
+	char cidade[15];
+	char estado[15];
+	char pais[15];
 
 } Endereco;
 
@@ -22,10 +22,10 @@ typedef struct {
 } Data;
 
 typedef struct {
-	char nome[20];
+	char nome[30];
 	char email[20];
 	Endereco endereco;
-	char telefone[12];
+	char telefone[15];
 	Data nasc;
 	char obs[50];
 
@@ -50,6 +50,8 @@ int main() {
 		scanf("%d", &op);
 		__fpurge(stdin);
 
+		printf("\n");
+
 		switch(op) {
 
 			case 1: inserirContato(&agenda[i++]); // so ira alterar o valor de i depois de executar a funcao
@@ -58,14 +60,15 @@ int main() {
 			case 2: mostrarContatos(agenda, i);
 				break;
 
-			case 3: salvarAgenda(arq, agenda, i);s
+			case 3: salvarAgenda(arq, agenda, i);
 
 			default: printf("Operação Inválida.\n");
 				break;
 		}
 
-		printf("Deseja fazer outra operação? (s ou n)\n");
+		printf("\nDeseja fazer outra operação? (s ou n)\n");
 		scanf("%c", &flag);
+		printf("\n");
 
 	} while(flag == 's');
 
@@ -84,6 +87,8 @@ void menu() {
 void inserirContato(Ficha *contato) {
 	int dia, mes, ano;
 
+	printf("=================================\n");
+	printf("\n");
 	__fpurge(stdin);
 
 	printf("Nome: ");
@@ -112,13 +117,12 @@ void inserirContato(Ficha *contato) {
 
 	printf("\n");
 
-	printf("ENDERECO\n");
 	printf("Rua: ");
 	fgets((*contato).endereco.rua, sizeof((*contato).endereco.rua), stdin);
 	__fpurge(stdin);
 
 	printf("Numero: ");
-	fgets((*contato).endereco.num, sizeof((*contato).endereco.rua), stdin);
+	fgets((*contato).endereco.num, sizeof((*contato).endereco.num), stdin);
 	__fpurge(stdin);
 
 	printf("Complemento: ");
@@ -174,6 +178,37 @@ void mostrarContatos(Ficha agenda[], int tam) {
 }
 
 void salvarAgenda(FILE *arq, Ficha agenda[], int tam) {
+	int i;
+	char nomeArq[10];
 
+	printf("Entre com o nome do arquivo: \n");
+	fgets(nomeArq, sizeof(nomeArq), stdin);
 
+	arq = fopen(nomeArq, "w");
+
+	if(arq) {
+		for(i=0; i<tam; i++) {
+
+			fprintf(arq, "%s", agenda[i].nome);
+			fprintf(arq, "%s", agenda[i].email);
+			fprintf(arq, "%s", agenda[i].endereco.rua);
+			fprintf(arq, "%s", agenda[i].endereco.num);
+			fprintf(arq, "%s", agenda[i].endereco.comp);
+			fprintf(arq, "%s", agenda[i].endereco.bairro);
+			fprintf(arq, "%s", agenda[i].endereco.cep);
+			fprintf(arq, "%s", agenda[i].endereco.cidade);
+			fprintf(arq, "%s", agenda[i].endereco.estado);
+			fprintf(arq, "%s", agenda[i].endereco.pais);
+			fprintf(arq, "%s", agenda[i].telefone);
+			fprintf(arq, "%d %d %d", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
+			fprintf(arq, "%s", agenda[i].obs);
+		}
+
+		printf("\n============================================\n");
+		printf("Agenda salva com sucesso.\n");
+		printf("\n============================================\n");
+	}
+	else {
+		printf("ERRO. Nao foi possivel criar um arquivo com este nome.\n");
+	}
 }
