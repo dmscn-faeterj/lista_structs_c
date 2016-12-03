@@ -34,6 +34,7 @@ typedef struct {
 void menu();
 void inserirContato(Ficha *contato);
 void mostrarContatos(Ficha agenda[], int tam);
+void salvarAgenda(FILE *arq, Ficha agenda[], int tam);
 
 int main() {
 	FILE *arq;
@@ -57,6 +58,8 @@ int main() {
 			case 2: mostrarContatos(agenda, i);
 				break;
 
+			case 3: salvarAgenda(arq, agenda, i);s
+
 			default: printf("Operação Inválida.\n");
 				break;
 		}
@@ -74,6 +77,7 @@ void menu() {
 	printf("\n============ Agenda ============\n\n");
 	printf("1- Inserir Contado\n");
 	printf("2- Mostrar Todos Contatos\n");
+	printf("3- Salvar Agenda\n");
 	printf("\n================================\n\n");
 }
 
@@ -167,4 +171,9 @@ void mostrarContatos(Ficha agenda[], int tam) {
 		printf("Estado: %s\n", agenda[i].endereco.estado);
 		printf("Pais: %s\n", agenda[i].endereco.pais);
 	}
+}
+
+void salvarAgenda(FILE *arq, Ficha agenda[], int tam) {
+
+
 }
