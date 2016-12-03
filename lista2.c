@@ -2,8 +2,6 @@
 #include <stdio_ext.h>
 #include <string.h>
 
-#define TAM 1
-
 typedef struct {
 	char rua[20];
 	char num[4];
@@ -33,70 +31,66 @@ typedef struct {
 
 } Ficha;
 
-// preenche a agenda
-void lerArq(FILE *arq, Ficha agenda[], int tam);
-void imprimeFicha(Ficha agenda[], int tam);
+void menu();
+void inserirContato(Ficha *agenda);
+void mostrarContatos(FILE *arq);
 
 int main() {
-	Ficha agenda[TAM];
 	FILE *arq;
+	Ficha agenda[100];
+	char ok;
+	int op;
 
-	arq = fopen("arq.dat", "r");
+	do {
 
-	
-	imprimeFicha(agenda, TAM);
+		menu();
 
-	return 0;
+		printf("Entre com a operação:\n");
+		scanf("%d", &op);
+
+		switch(op) {
+
+			case 1: inserirContato(arq);
+				break;
+
+			case 2: mostrarContatos(arq);
+				break;
+
+			default: printf("Operação Inválida.\n");
+				break;
+		}
+
+	} while(ok == 'n');
+
 }
 
-void lerArq(FILE *arq, Ficha agenda[], int tam) {
-	int i, q, linhas;
+void menu() {
 
-	fscanf(arq, "%d %d\n", &q, &linhas);
-
-	for(i=0; i<q; i++) {
-		fscanf(arq, "%s\n", agenda[i].nome);
-		fscanf(arq, "%s\n", agenda[i].email);
-
-		fscanf(arq, "%s\n", agenda[i].endereco.rua);
-		fscanf(arq, "%s\n", agenda[i].endereco.num);
-		fscanf(arq, "%s\n", agenda[i].endereco.comp);
-		fscanf(arq, "%s\n", agenda[i].endereco.bairro);
-		fscanf(arq, "%s\n", agenda[i].endereco.cep);
-		fscanf(arq, "%s\n", agenda[i].endereco.cidade);
-		fscanf(arq, "%s\n", agenda[i].endereco.estado);
-		fscanf(arq, "%s\n", agenda[i].endereco.pais);
-
-		fscanf(arq, "%s\n", agenda[i].telefone);
-
-		fscanf(arq, "%s\n", agenda[i].nasc.dia);
-		fscanf(arq, "%s\n", agenda[i].nasc.mes);
-		fscanf(arq, "%s\n", agenda[i].nasc.ano);
-
-		fscanf(arq, "%s\n", agenda[i].obs);
-
-	}
+	printf("\n============ Agenda ============\n\n");
+	printf("1- Inserir Contado\n");
+	printf("2- Mostrar Todos Contatos\n");
+	printf("\n================================\n\n");
 }
 
-void imprimeFicha(Ficha agenda[], int tam) {
-	int i;
+void inserirContato() {
+	char string[50];
 
-	for(i=0; i<tam; i++) {
+	arq = fopen("arq.dat", "w");
 
-		printf("\n");
+	printf("Nome: ");
+	fgets(string, sizeof(string), stdin); 	// recebe do usuario o nome do contato
+	fprintf(arq, "%s\n", string); 			// salva no arquivo o nome do contato
 
-		printf("%s\n", agenda[i].nome);
-		printf("%s\n", agenda[i].email);
-		printf("%s\n", agenda[i].endereco.rua);
-		printf("%s\n", agenda[i].endereco.num);
-		printf("%s\n", agenda[i].endereco.comp);
-		printf("%s\n", agenda[i].endereco.bairro);
-		printf("%s\n", agenda[i].endereco.cep);
-		printf("%s\n", agenda[i].endereco.cidade);
-		printf("%s\n", agenda[i].endereco.estado);
-		printf("%s\n", agenda[i].endereco.pais);
-		printf("%s\n", agenda[i].telefone);
-		printf("%s/%s/%s\n", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
-		printf("%s\n", agenda[i].obs);
-	}
+	printf("Email: ");
+	fgets(string, sizeof(string), stdin);
+	fprintf(arq, "%s\n", string);
+
+	fclose(arq);
+}
+
+void mostrarContatos(FILE *arq) {
+
+	fopen("arq.dat", "r");
+
+
 }
