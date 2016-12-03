@@ -15,9 +15,9 @@ typedef struct {
 } Endereco;
 
 typedef struct {
-	char dia[2];
-	char mes[2];
-	char ano[4];
+	int dia[2];
+	int mes[2];
+	int ano[4];
 
 } Data;
 
@@ -32,7 +32,7 @@ typedef struct {
 } Ficha;
 
 void menu();
-void inserirContato(Ficha *agenda);
+void inserirContato(Ficha *contato);
 void mostrarContatos(FILE *arq);
 
 int main() {
@@ -72,25 +72,53 @@ void menu() {
 	printf("\n================================\n\n");
 }
 
-void inserirContato() {
-	char string[50];
-
-	arq = fopen("arq.dat", "w");
+void inserirContato(Ficha *contato) {
 
 	printf("Nome: ");
-	fgets(string, sizeof(string), stdin); 	// recebe do usuario o nome do contato
-	fprintf(arq, "%s\n", string); 			// salva no arquivo o nome do contato
+	fgets((*contato).nome, sizeof((*contato).nome), stdin);
 
 	printf("Email: ");
-	fgets(string, sizeof(string), stdin);
-	fprintf(arq, "%s\n", string);
+	fgets((*contato).email, sizeof((*contato).email), stdin);
 
-	fclose(arq);
+	printf("\n");
+
+	printf("ENDERECO\n");
+	printf("Rua: ");
+	fgets((*contato).endereco.rua, sizeof((*contato).endereco.rua), stdin);
+
+	printf("Numero: ");
+	fgets((*contato).endereco.num, sizeof((*contato).endereco.rua), stdin);
+
+	printf("Complemento: ");
+	fgets((*contato).endereco.comp, sizeof((*contato).endereco.comp), stdin);
+
+	printf("Bairro: ");
+	fgets((*contato).endereco.bairro, sizeof((*contato).endereco.bairro), stdin);
+
+	printf("CEP: ");
+	fgets((*contato).endereco.cep, sizeof((*contato).endereco.cep), stdin);
+
+	printf("Cidade: ");
+	fgets((*contato).endereco.cidade, sizeof((*contato).endereco.cidade), stdin);
+
+	printf("Estado: ");
+	fgets((*contato).endereco.estado, sizeof((*contato).endereco.estado), stdin);
+
+	printf("Pais: ");
+	fgets((*contato).endereco.pais, sizeof((*contato).endereco.pais), stdin);
+
+	printf("\n");
+
+	printf("Telefone: ");
+	fgets((*contato).telefone, sizeof((*contato).telefone), stdin);
+
+	printf("Data de Nascimento: ");
+	scanf("%d/%d/%d", contato.nasc.dia, contato.nasc.mes, contato.nasc.ano);
+
+	printf("Oservacao:\n");
+	fgets((*contato).obs, sizeof((*contato).obs), stdin);
 }
 
-void mostrarContatos(FILE *arq) {
-
-	fopen("arq.dat", "r");
-
+void mostrarContatos() {
 
 }
