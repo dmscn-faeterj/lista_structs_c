@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdio_ext.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct {
 	char rua[20];
@@ -36,6 +37,7 @@ void inserirContato(Ficha *contato);
 void mostrarContatos(Ficha agenda[], int tam);
 void salvarAgenda(FILE *arq, Ficha agenda[], int tam);
 void abrirAgenda(FILE *arq, Ficha agenda[], int *j);
+void strtoupper(char s[]);
 
 int main() {
 	FILE *arq;
@@ -99,6 +101,7 @@ void inserirContato(Ficha *contato) {
 
 	printf("Nome: ");
 	fgets((*contato).nome, sizeof((*contato).nome), stdin);
+	strtoupper((*contato).nome);
 	__fpurge(stdin);
 
 	printf("Email: ");
@@ -125,6 +128,7 @@ void inserirContato(Ficha *contato) {
 
 	printf("Rua: ");
 	fgets((*contato).endereco.rua, sizeof((*contato).endereco.rua), stdin);
+	strtoupper((*contato).endereco.rua);
 	__fpurge(stdin);
 
 	printf("Numero: ");
@@ -137,6 +141,7 @@ void inserirContato(Ficha *contato) {
 
 	printf("Bairro: ");
 	fgets((*contato).endereco.bairro, sizeof((*contato).endereco.bairro), stdin);
+	strtoupper((*contato).endereco.bairro);
 	__fpurge(stdin);
 
 	printf("CEP: ");
@@ -145,14 +150,17 @@ void inserirContato(Ficha *contato) {
 
 	printf("Cidade: ");
 	fgets((*contato).endereco.cidade, sizeof((*contato).endereco.cidade), stdin);
+	strtoupper((*contato).endereco.cidade);
 	__fpurge(stdin);
 
 	printf("Estado: ");
 	fgets((*contato).endereco.estado, sizeof((*contato).endereco.estado), stdin);
+	strtoupper((*contato).endereco.estado);
 	__fpurge(stdin);
 
 	printf("Pais: ");
 	fgets((*contato).endereco.pais, sizeof((*contato).endereco.pais), stdin);
+	strtoupper((*contato).endereco.pais);
 	__fpurge(stdin);
 }
 
@@ -262,4 +270,12 @@ void abrirAgenda(FILE *arq, Ficha agenda[], int *j) {
 	}
 
 	fclose(arq);
+}
+
+void strtoupper(char s[]) {
+	int i;
+
+	for(i=0; i < strlen(s); i++) {
+		s[i] = toupper(s[i]);
+	}
 }
