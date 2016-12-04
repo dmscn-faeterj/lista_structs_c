@@ -35,6 +35,7 @@ void menu();
 void inserirContato(Ficha *contato);
 void mostrarContatos(Ficha agenda[], int tam);
 void salvarAgenda(FILE *arq, Ficha agenda[], int tam);
+void abrirAgenda(FILE *arq, Ficha agenda[], int *j);
 
 int main() {
 	FILE *arq;
@@ -46,7 +47,7 @@ int main() {
 
 		menu();
 
-		printf("Entre com a operação:\n");
+		printf("Entre com a operação: ");
 		scanf("%d", &op);
 		__fpurge(stdin);
 
@@ -61,6 +62,10 @@ int main() {
 				break;
 
 			case 3: salvarAgenda(arq, agenda, i);
+				break;
+
+			case 4: abrirAgenda(arq, agenda, &i);
+				break;
 
 			default: printf("Operação Inválida.\n");
 				break;
@@ -70,7 +75,7 @@ int main() {
 		scanf("%c", &flag);
 		printf("\n");
 
-	} while(flag == 's');
+	} while(flag != 'n');
 
 	return 0;
 }
@@ -81,6 +86,7 @@ void menu() {
 	printf("1- Inserir Contado\n");
 	printf("2- Mostrar Todos Contatos\n");
 	printf("3- Salvar Agenda\n");
+	printf("4- Abrir Agenda Existente\n");
 	printf("\n================================\n\n");
 }
 
@@ -156,24 +162,24 @@ void mostrarContatos(Ficha agenda[], int tam) {
 	for(i=0; i<tam; i++) {
 		printf("============= %dº Contato =============\n", i+1);
 		printf("\n");
-		printf("----------------- Dados ---------------\n");
-		printf("Nome: %s\n", agenda[i].nome);
+		printf("---------------- Dados ---------------\n");
+		printf("Nome: %s", agenda[i].nome);
 		printf("Email: %s\n", agenda[i].email);
 		printf("Telefone: %s\n", agenda[i].telefone);
 		printf("Nascimento: %d/%d/%d\n", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
-		printf("Observacoes: %s\n", agenda[i].obs);
+		printf("Observacoes: %s", agenda[i].obs);
 
 
-		printf("---------------- Endereco -------------\n");
-		printf("ENDERECO\n");
-		printf("Rua: %s\n", agenda[i].endereco.rua);
+		printf("--------------- Endereco -------------\n");
+		printf("Rua: %s", agenda[i].endereco.rua);
 		printf("Nº: %s\n", agenda[i].endereco.num);
-		printf("Complemento: %s\n", agenda[i].endereco.comp);
-		printf("Bairro: %s\n", agenda[i].endereco.bairro);
+		printf("Complemento: %s", agenda[i].endereco.comp);
+		printf("Bairro: %s", agenda[i].endereco.bairro);
 		printf("CEP: %s\n", agenda[i].endereco.cep);
-		printf("Cidade: %s\n", agenda[i].endereco.cidade);
-		printf("Estado: %s\n", agenda[i].endereco.estado);
-		printf("Pais: %s\n", agenda[i].endereco.pais);
+		printf("Cidade: %s", agenda[i].endereco.cidade);
+		printf("Estado: %s", agenda[i].endereco.estado);
+		printf("Pais: %s", agenda[i].endereco.pais);
+		printf("---------------------------------------\n");
 	}
 }
 
@@ -185,6 +191,7 @@ void salvarAgenda(FILE *arq, Ficha agenda[], int tam) {
 	fgets(nomeArq, sizeof(nomeArq), stdin);
 
 	arq = fopen(nomeArq, "w");
+	fprintf(arq, "%d\n", tam); // salva o numero de contatos salvos
 
 	if(arq) {
 		for(i=0; i<tam; i++) {
@@ -200,15 +207,59 @@ void salvarAgenda(FILE *arq, Ficha agenda[], int tam) {
 			fprintf(arq, "%s", agenda[i].endereco.estado);
 			fprintf(arq, "%s", agenda[i].endereco.pais);
 			fprintf(arq, "%s", agenda[i].telefone);
-			fprintf(arq, "%d %d %d", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
+			fprintf(arq, "%d %d %d\n", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
 			fprintf(arq, "%s", agenda[i].obs);
 		}
 
 		printf("\n============================================\n");
-		printf("Agenda salva com sucesso.\n");
+		printf("\nAgenda salva com sucesso.\n");
 		printf("\n============================================\n");
 	}
 	else {
 		printf("ERRO. Nao foi possivel criar um arquivo com este nome.\n");
 	}
+
+	fclose(arq);
+}
+
+void abrirAgenda(FILE *arq, Ficha agenda[], int *j) {
+	char nomeArq[10];
+	int i;
+
+	printf("Entre como nome do arquivo: ");
+	fgets(nomeArq, sizeof(nomeArq), stdin);
+
+	arq = fopen(nomeArq, "r");
+
+	if(arq) {
+
+		fscanf(arq, "%d\n", j);
+
+		for(i=0; i<*j; i++) {
+			fgets(agenda[i].nome, sizeof(agenda[i].nome), arq);
+			fscanf(arq, "%s\n", agenda[i].email);
+			fgets(agenda[i].endereco.rua, sizeof(agenda[i].endereco.rua), arq);
+			fscanf(arq, "%s\n", agenda[i].endereco.num);
+			fgets(agenda[i].endereco.comp, sizeof(agenda[i].endereco.comp), arq);
+			fgets(agenda[i].endereco.bairro, sizeof(agenda[i].endereco.bairro), arq);
+			fscanf(arq, "%s\n", agenda[i].endereco.cep);
+			fgets(agenda[i].endereco.cidade, sizeof(agenda[i].endereco.cidade), arq);
+			fgets(agenda[i].endereco.estado, sizeof(agenda[i].endereco.estado), arq);
+			fgets(agenda[i].endereco.pais, sizeof(agenda[i].endereco.pais), arq);
+			fscanf(arq, "%s\n", agenda[i].telefone);
+			fscanf(arq, "%d %d %d\n", &agenda[i].nasc.dia, &agenda[i].nasc.mes, &agenda[i].nasc.ano);
+			fgets(agenda[i].obs, sizeof(agenda[i].obs), arq);
+		}
+
+
+		printf("\n============================================\n");
+		printf("\nAgenda recuperada com sucesso.\n");
+		printf("\n============================================\n");
+	}
+	else {
+
+		printf("Erro ao tentar abrir o arquivo.\n");
+	}
+
+	fclose(arq);
 }
