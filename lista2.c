@@ -297,18 +297,18 @@ void strtoupper(char s[]) {
 }
 
 int buscaPosicao(Ficha agenda[], int tam, char s[]) {
-	int i = 1;
+	int i = 0;
 	char aux[50];
 
 	strcpy(aux, agenda[i].nome);
 
-	while(strcmp(s,aux)>=0) {
+	while(strcmp(s,aux)>0 && i<tam) {
 
-		strcpy(aux, agenda[i].nome);
 		i++;
+		strcpy(aux, agenda[i].nome);
 	}
 
-	return --i;
+	return i;
 }
 
 void reposicionarAgenda(Ficha agenda[], int tam, int i) {
