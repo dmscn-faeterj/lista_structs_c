@@ -33,11 +33,13 @@ typedef struct {
 } Ficha;
 
 void menu();
-void inserirContato(Ficha *contato);
+void inserirContato(Ficha agenda[], int tam);
 void mostrarContatos(Ficha agenda[], int tam);
 void salvarAgenda(FILE *arq, Ficha agenda[], int tam);
 void abrirAgenda(FILE *arq, Ficha agenda[], int *j);
 void strtoupper(char s[]);
+int buscaPosicao(Ficha agenda[], int tam, char s[]);
+void reposicionarAgenda(Ficha agenda[], int tam, int i);
 
 int main() {
 	FILE *arq;
@@ -57,7 +59,7 @@ int main() {
 
 		switch(op) {
 
-			case 1: inserirContato(&agenda[i++]); // so ira alterar o valor de i depois de executar a funcao
+			case 1: inserirContato(agenda, i++); // so ira alterar o valor de i depois de executar a funcao
 				break;
 
 			case 2: mostrarContatos(agenda, i);
@@ -92,75 +94,89 @@ void menu() {
 	printf("\n================================\n\n");
 }
 
-void inserirContato(Ficha *contato) {
-	int dia, mes, ano;
+void inserirContato(Ficha agenda[], int tam) {
+	int dia, mes, ano, i;
+	char str[50];
 
 	printf("=================================\n");
 	printf("\n");
 	__fpurge(stdin);
 
 	printf("Nome: ");
-	fgets((*contato).nome, sizeof((*contato).nome), stdin);
-	strtoupper((*contato).nome);
+	fgets(str, sizeof(str), stdin);
+	strtoupper(str);
 	__fpurge(stdin);
 
+	if(tam > 0) {
+		
+		i = buscaPosicao(agenda, tam, str);
+
+		reposicionarAgenda(agenda, tam, i);
+	}
+	else {
+
+		i = 0;
+	}
+
+	strcpy(agenda[i].nome, str);
+
 	printf("Email: ");
-	fgets((*contato).email, sizeof((*contato).email), stdin);
+	fgets(agenda[i].email, sizeof(agenda[i].email), stdin);
 	__fpurge(stdin);
 
 	printf("Telefone: ");
-	fgets((*contato).telefone, sizeof((*contato).telefone), stdin);
+	fgets(agenda[i].telefone, sizeof(agenda[i].telefone), stdin);
 	__fpurge(stdin);
 
 	printf("Data de Nascimento: ");
 	scanf("%d/%d/%d", &dia, &mes, &ano);
 	__fpurge(stdin);
 
-	(*contato).nasc.dia = dia;
-	(*contato).nasc.mes = mes;
-	(*contato).nasc.ano = ano;
+	agenda[i].nasc.dia = dia;
+	agenda[i].nasc.mes = mes;
+	agenda[i].nasc.ano = ano;
 
 	printf("Oservacao:\n");
-	fgets((*contato).obs, sizeof((*contato).obs), stdin);
+	fgets(agenda[i].obs, sizeof(agenda[i].obs), stdin);
 	__fpurge(stdin);
 
 	printf("\n");
 
 	printf("Rua: ");
-	fgets((*contato).endereco.rua, sizeof((*contato).endereco.rua), stdin);
-	strtoupper((*contato).endereco.rua);
+	fgets(agenda[i].endereco.rua, sizeof(agenda[i].endereco.rua), stdin);
+	strtoupper(agenda[i].endereco.rua);
 	__fpurge(stdin);
 
 	printf("Numero: ");
-	fgets((*contato).endereco.num, sizeof((*contato).endereco.num), stdin);
+	fgets(agenda[i].endereco.num, sizeof(agenda[i].endereco.num), stdin);
 	__fpurge(stdin);
 
 	printf("Complemento: ");
-	fgets((*contato).endereco.comp, sizeof((*contato).endereco.comp), stdin);
+	fgets(agenda[i].endereco.comp, sizeof(agenda[i].endereco.comp), stdin);
 	__fpurge(stdin);
 
 	printf("Bairro: ");
-	fgets((*contato).endereco.bairro, sizeof((*contato).endereco.bairro), stdin);
-	strtoupper((*contato).endereco.bairro);
+	fgets(agenda[i].endereco.bairro, sizeof(agenda[i].endereco.bairro), stdin);
+	strtoupper(agenda[i].endereco.bairro);
 	__fpurge(stdin);
 
 	printf("CEP: ");
-	fgets((*contato).endereco.cep, sizeof((*contato).endereco.cep), stdin);
+	fgets(agenda[i].endereco.cep, sizeof(agenda[i].endereco.cep), stdin);
 	__fpurge(stdin);
 
 	printf("Cidade: ");
-	fgets((*contato).endereco.cidade, sizeof((*contato).endereco.cidade), stdin);
-	strtoupper((*contato).endereco.cidade);
+	fgets(agenda[i].endereco.cidade, sizeof(agenda[i].endereco.cidade), stdin);
+	strtoupper(agenda[i].endereco.cidade);
 	__fpurge(stdin);
 
 	printf("Estado: ");
-	fgets((*contato).endereco.estado, sizeof((*contato).endereco.estado), stdin);
-	strtoupper((*contato).endereco.estado);
+	fgets(agenda[i].endereco.estado, sizeof(agenda[i].endereco.estado), stdin);
+	strtoupper(agenda[i].endereco.estado);
 	__fpurge(stdin);
 
 	printf("Pais: ");
-	fgets((*contato).endereco.pais, sizeof((*contato).endereco.pais), stdin);
-	strtoupper((*contato).endereco.pais);
+	fgets(agenda[i].endereco.pais, sizeof(agenda[i].endereco.pais), stdin);
+	strtoupper(agenda[i].endereco.pais);
 	__fpurge(stdin);
 }
 
@@ -277,5 +293,49 @@ void strtoupper(char s[]) {
 
 	for(i=0; i < strlen(s); i++) {
 		s[i] = toupper(s[i]);
+	}
+}
+
+int buscaPosicao(Ficha agenda[], int tam, char s[]) {
+	int i = 1;
+	char aux[50];
+
+	strcpy(aux, agenda[i].nome);
+
+	while(strcmp(s,aux)>=0) {
+
+		strcpy(aux, agenda[i].nome);
+		i++;
+	}
+
+	return --i;
+}
+
+void reposicionarAgenda(Ficha agenda[], int tam, int i) {
+	Ficha aux;
+	int j;
+	char str[50]; 
+
+	for(j=tam; j>=i; j--) {
+
+		strcpy(agenda[j+1].nome, agenda[j].nome);
+		strcpy(agenda[j+1].email, agenda[j].email);
+
+		strcpy(agenda[j+1].endereco.rua, agenda[j].endereco.rua);
+		strcpy(agenda[j+1].endereco.num, agenda[j].endereco.num);
+		strcpy(agenda[j+1].endereco.comp, agenda[j].endereco.comp);
+		strcpy(agenda[j+1].endereco.bairro, agenda[j].endereco.bairro);
+		strcpy(agenda[j+1].endereco.cep, agenda[j].endereco.cep);
+		strcpy(agenda[j+1].endereco.cidade, agenda[j].endereco.cidade);
+		strcpy(agenda[j+1].endereco.estado, agenda[j].endereco.estado);
+		strcpy(agenda[j+1].endereco.pais, agenda[j].endereco.pais);
+
+		strcpy(agenda[j+1].telefone, agenda[j].telefone);
+
+		agenda[j+1].nasc.dia = agenda[j].nasc.dia;
+		agenda[j+1].nasc.mes = agenda[j].nasc.mes;
+		agenda[j+1].nasc.ano = agenda[j].nasc.ano;
+
+		strcpy(agenda[j+1].obs, agenda[j].obs);
 	}
 }
