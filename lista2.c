@@ -43,6 +43,7 @@ int buscaPosicao(Ficha agenda[], int tam, char s[]);
 void reposicionarAgenda(Ficha agenda[], int tam, int i);
 void buscaContato(Ficha agenda[], int tam);
 void imprimeContato(Ficha contato);
+void imprimeContatoRed(Ficha contato);
 void buscaNome(Ficha agenda[], int tam, char nome[]);
 void buscaMes(Ficha agenda[], int tam, int mes);
 void buscaDiaMes(Ficha agenda[], int tam, int dia, int mes);
@@ -230,11 +231,31 @@ void removerContato(Ficha agenda[], int tam) {
 }
 
 void mostrarContatos(Ficha agenda[], int tam) {
-	int i;
+	int i, op;
 
-	for(i=0; i<tam; i++) {
+	printf("1- Contato Reduzido\n");
+	printf("2- Contato Completo\n");
+	
+	printf("\nEntre com a opcao: ");
+	scanf("%d", &op);
+	__fpurge(stdin);
 
-		imprimeContato(agenda[i]);
+	switch(op) {
+		case 1:
+			for(i=0; i<tam; i++) {
+				imprimeContatoRed(agenda[i]);
+			}
+			break;
+
+		case 2:
+			for(i=0; i<tam; i++) {
+				imprimeContato(agenda[i]);
+			}
+			break;
+
+		default:
+			printf("Opção Inválida.\n");
+			break;
 	}
 }
 
@@ -433,6 +454,16 @@ void imprimeContato(Ficha contato) {
 	printf("Cidade: %s", contato.endereco.cidade);
 	printf("Estado: %s", contato.endereco.estado);
 	printf("Pais: %s", contato.endereco.pais);
+	printf("\n============================================\n");
+}
+
+void imprimeContatoRed(Ficha contato) {
+
+	printf("\n============================================\n");
+	printf("\n");
+	printf("Nome: %s", contato.nome);
+	printf("Email: %s\n", contato.email);
+	printf("Telefone: %s\n", contato.telefone);
 	printf("\n============================================\n");
 }
 
