@@ -34,6 +34,7 @@ typedef struct {
 
 void menu();
 void inserirContato(Ficha agenda[], int tam);
+void removerContato(Ficha agenda[], int tam);
 void mostrarContatos(Ficha agenda[], int tam);
 void salvarAgenda(FILE *arq, Ficha agenda[], int tam);
 void abrirAgenda(FILE *arq, Ficha agenda[], int *j);
@@ -68,16 +69,19 @@ int main() {
 			case 1: inserirContato(agenda, i++); // so ira alterar o valor de i depois de executar a funcao
 				break;
 
-			case 2: mostrarContatos(agenda, i);
+			case 2: removerContato(agenda, i--);
 				break;
 
-			case 3: buscaContato(agenda, i);
+			case 3: mostrarContatos(agenda, i);
 				break;
 
-			case 4: salvarAgenda(arq, agenda, i);
+			case 4: buscaContato(agenda, i);
 				break;
 
-			case 5: abrirAgenda(arq, agenda, &i);
+			case 5: salvarAgenda(arq, agenda, i);
+				break;
+
+			case 6: abrirAgenda(arq, agenda, &i);
 				break;
 
 			default: printf("Operação Inválida.\n");
@@ -97,10 +101,11 @@ void menu() {
 
 	printf("\n============ Agenda ============\n\n");
 	printf("1- Inserir Contado\n");
-	printf("2- Mostrar Todos Contatos\n");
-	printf("3- Buscar Contato\n");
-	printf("4- Salvar Agenda\n");
-	printf("5- Abrir Agenda Existente\n");
+	printf("2- Remover Contato\n");
+	printf("3- Mostrar Todos Contatos\n");
+	printf("4- Buscar Contato\n");
+	printf("5- Salvar Agenda\n");
+	printf("6- Abrir Agenda Existente\n");
 	printf("\n================================\n\n");
 }
 
@@ -190,11 +195,45 @@ void inserirContato(Ficha agenda[], int tam) {
 	__fpurge(stdin);
 }
 
+void removerContato(Ficha agenda[], int tam) {
+	int i, j;
+	char str[50];
+
+	printf("Entre com o nome completo do contato: ");
+	fgets(str, sizeof(str), stdin);
+
+	strtoupper(str);
+
+	j = buscaPosicao(agenda, tam, str);
+
+	for(i=j; i<tam+1; i++) {
+		strcpy(agenda[j].nome, agenda[j+1].nome);
+		strcpy(agenda[j].email, agenda[j+1].email);
+
+		strcpy(agenda[j].endereco.rua, agenda[j+1].endereco.rua);
+		strcpy(agenda[j].endereco.num, agenda[j+1].endereco.num);
+		strcpy(agenda[j].endereco.comp, agenda[j+1].endereco.comp);
+		strcpy(agenda[j].endereco.bairro, agenda[j+1].endereco.bairro);
+		strcpy(agenda[j].endereco.cep, agenda[j+1].endereco.cep);
+		strcpy(agenda[j].endereco.cidade, agenda[j+1].endereco.cidade);
+		strcpy(agenda[j].endereco.estado, agenda[j+1].endereco.estado);
+		strcpy(agenda[j].endereco.pais, agenda[j+1].endereco.pais);
+
+		strcpy(agenda[j].telefone, agenda[j+1].telefone);
+
+		agenda[j].nasc.dia = agenda[j+1].nasc.dia;
+		agenda[j].nasc.mes = agenda[j+1].nasc.mes;
+		agenda[j].nasc.ano = agenda[j+1].nasc.ano;
+
+		strcpy(agenda[j].obs, agenda[j+1].obs);
+	}
+}
+
 void mostrarContatos(Ficha agenda[], int tam) {
 	int i;
 
 	for(i=0; i<tam; i++) {
-		printf("============= %dº Contato =============\n", i+1);
+
 		imprimeContato(agenda[i]);
 	}
 }
