@@ -40,6 +40,12 @@ void abrirAgenda(FILE *arq, Ficha agenda[], int *j);
 void strtoupper(char s[]);
 int buscaPosicao(Ficha agenda[], int tam, char s[]);
 void reposicionarAgenda(Ficha agenda[], int tam, int i);
+void buscaContato(Ficha agenda[], int tam);
+void imprimeContato(Ficha contato);
+void buscaNome(Ficha agenda[], int tam, char nome[]);
+void buscaMes(Ficha agenda[], int tam, int mes);
+void buscaDiaMes(Ficha agenda[], int tam, int dia, int mes);
+
 
 int main() {
 	FILE *arq;
@@ -65,10 +71,13 @@ int main() {
 			case 2: mostrarContatos(agenda, i);
 				break;
 
-			case 3: salvarAgenda(arq, agenda, i);
+			case 3: buscaContato(agenda, i);
 				break;
 
-			case 4: abrirAgenda(arq, agenda, &i);
+			case 4: salvarAgenda(arq, agenda, i);
+				break;
+
+			case 5: abrirAgenda(arq, agenda, &i);
 				break;
 
 			default: printf("Operação Inválida.\n");
@@ -89,8 +98,9 @@ void menu() {
 	printf("\n============ Agenda ============\n\n");
 	printf("1- Inserir Contado\n");
 	printf("2- Mostrar Todos Contatos\n");
-	printf("3- Salvar Agenda\n");
-	printf("4- Abrir Agenda Existente\n");
+	printf("3- Buscar Contato\n");
+	printf("4- Salvar Agenda\n");
+	printf("5- Abrir Agenda Existente\n");
 	printf("\n================================\n\n");
 }
 
@@ -185,25 +195,7 @@ void mostrarContatos(Ficha agenda[], int tam) {
 
 	for(i=0; i<tam; i++) {
 		printf("============= %dº Contato =============\n", i+1);
-		printf("\n");
-		printf("---------------- Dados ---------------\n");
-		printf("Nome: %s", agenda[i].nome);
-		printf("Email: %s\n", agenda[i].email);
-		printf("Telefone: %s\n", agenda[i].telefone);
-		printf("Nascimento: %d/%d/%d\n", agenda[i].nasc.dia, agenda[i].nasc.mes, agenda[i].nasc.ano);
-		printf("Observacoes: %s", agenda[i].obs);
-
-
-		printf("--------------- Endereco -------------\n");
-		printf("Rua: %s", agenda[i].endereco.rua);
-		printf("Nº: %s\n", agenda[i].endereco.num);
-		printf("Complemento: %s", agenda[i].endereco.comp);
-		printf("Bairro: %s", agenda[i].endereco.bairro);
-		printf("CEP: %s\n", agenda[i].endereco.cep);
-		printf("Cidade: %s", agenda[i].endereco.cidade);
-		printf("Estado: %s", agenda[i].endereco.estado);
-		printf("Pais: %s", agenda[i].endereco.pais);
-		printf("---------------------------------------\n");
+		imprimeContato(agenda[i]);
 	}
 }
 
@@ -338,4 +330,126 @@ void reposicionarAgenda(Ficha agenda[], int tam, int i) {
 
 		strcpy(agenda[j+1].obs, agenda[j].obs);
 	}
+}
+
+void buscaContato(Ficha agenda[], int tam) {
+	int op, dia, mes;
+	char nome[20];
+
+	printf("Deseja buscar o contato por:\n");
+	printf("1- Nome\n");
+	printf("2- Mes de Aniversario\n");
+	printf("3- Dia e Mes de Aniversario\n");
+
+	printf("\nEntre com a opção: ");
+	scanf("%d", &op);
+	__fpurge(stdin);
+
+	switch(op) {
+		case 1: 
+			printf("Entre com o nome do contato: ");
+			fgets(nome, sizeof(nome), stdin);
+			__fpurge(stdin);
+
+			buscaNome(agenda, tam, nome);
+			break;
+
+		case 2: 
+			printf("Entre com o mes: ");
+			scanf("%d", &mes);
+			__fpurge(stdin);
+
+			buscaMes(agenda, tam, mes);
+			break;
+
+		case 3: 
+			printf("Entre com o dia e mes: ");
+			scanf("%d/%d", &dia, &mes);
+			__fpurge(stdin);
+
+			buscaDiaMes(agenda, tam, dia, mes);
+			break;
+	}
+
+}
+
+void imprimeContato(Ficha contato) {
+
+	printf("\n============================================\n");
+	printf("\n");
+	printf("---------------- Dados ---------------\n");
+	printf("Nome: %s", contato.nome);
+	printf("Email: %s\n", contato.email);
+	printf("Telefone: %s\n", contato.telefone);
+	printf("Nascimento: %d/%d/%d\n", contato.nasc.dia, contato.nasc.mes, contato.nasc.ano);
+	printf("Observacoes: %s", contato.obs);
+
+
+	printf("--------------- Endereco -------------\n");
+	printf("Rua: %s", contato.endereco.rua);
+	printf("Nº: %s\n", contato.endereco.num);
+	printf("Complemento: %s", contato.endereco.comp);
+	printf("Bairro: %s", contato.endereco.bairro);
+	printf("CEP: %s\n", contato.endereco.cep);
+	printf("Cidade: %s", contato.endereco.cidade);
+	printf("Estado: %s", contato.endereco.estado);
+	printf("Pais: %s", contato.endereco.pais);
+	printf("\n============================================\n");
+}
+
+void buscaNome(Ficha agenda[], int tam, char nome[]) {
+	int i = 0;
+	char aux[50];
+
+	strtoupper(nome);
+
+	nome[strlen(nome)-1] = '\0'; // elimina o ultimo caracter vazio
+
+	do {
+
+		sscanf(agenda[i].nome, "%s", aux);	// guarda somente o primeiro nome
+
+		if(strcmp(aux, nome) == 0) {
+
+			imprimeContato(agenda[i]);
+		}
+
+		i++;
+
+	} while(strcmp(aux, nome)<=0 && i<tam);
+}
+
+void buscaMes(Ficha agenda[], int tam, int mes) {
+	int i = 0;
+	int aux;
+
+	do {
+
+		aux = agenda[i].nasc.mes;
+
+		if(aux == mes) {
+
+			imprimeContato(agenda[i]);
+		}
+
+		i++;
+	} while (i<tam);
+}
+
+void buscaDiaMes(Ficha agenda[], int tam, int dia, int mes) {
+	int i = 0;
+	int auxMes, auxDia;
+
+	do {
+
+		auxMes = agenda[i].nasc.mes;
+		auxDia = agenda[i].nasc.dia;
+
+		if(auxMes == mes && auxDia == dia) {
+
+			imprimeContato(agenda[i]);
+		}
+		
+		i++;
+	} while (i<tam);
 }
