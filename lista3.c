@@ -8,6 +8,7 @@ typedef struct {
 } Ponto;
 
 int inRect(Ponto p, Ponto x, Ponto y);
+int areaRect(Ponto x, Ponto y);
 
 int main() {
 	Ponto p, x, y;
@@ -37,6 +38,7 @@ int main() {
 	}
 
 	printf("O ponto P %s retangulo formado por X e Y.\n", resp);
+	printf("A area do retangulo formado pelos pontos X e Y é %d.\n", areaRect(x, y));
 
 }
 
@@ -58,4 +60,8 @@ int inRect(Ponto p, Ponto x, Ponto y) {
 		return 0;
 	}
 
+}
+
+int areaRect(Ponto x, Ponto y) {
+	return (x.y - y.y) * (y.x - x.x);
 }
