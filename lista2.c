@@ -53,7 +53,7 @@ int main() {
 	FILE *arq;
 	Ficha agenda[100];
 	char flag;
-	int op, i = 0;
+	int op, i = 0, lop = 0;
 
 	do {
 
@@ -68,9 +68,11 @@ int main() {
 		switch(op) {
 
 			case 1: inserirContato(agenda, i++); // so ira alterar o valor de i depois de executar a funcao
+				lop = 1;
 				break;
 
 			case 2: removerContato(agenda, i--);
+				lop = 1;
 				break;
 
 			case 3: mostrarContatos(agenda, i);
@@ -80,6 +82,7 @@ int main() {
 				break;
 
 			case 5: salvarAgenda(arq, agenda, i);
+				lop = 0;
 				break;
 
 			case 6: abrirAgenda(arq, agenda, &i);
@@ -94,6 +97,16 @@ int main() {
 		printf("\n");
 
 	} while(flag != 'n');
+
+	if(lop == 1) {
+		printf("Deseja sair sem salvar? (s ou n)\n");
+		scanf("%c", &flag);
+		__fpurge(stdin);
+
+		if(flag == s) {
+			salvarAgenda(arq, agenda, i);
+		}
+	}
 
 	return 0;
 }
