@@ -15,8 +15,10 @@ void triangulo();
 int inRect(Ponto p, Ponto x, Ponto y);
 int areaRect(Ponto x, Ponto y);
 int inCirc(Ponto p, Ponto c, float r);
-float areaCirc(float r);
-void stringResp(char string[], int i);
+float compCirc(float r);
+int formaTri(Ponto x, Ponto y, Ponto z);
+void clasTri(Ponto x, Ponto y, Ponto z, char str[]);
+void stringResp(char str[], int i);
 
 int main() {
 	int op;
@@ -109,18 +111,38 @@ void circunferencia() {
 	stringResp(resp, inCirc(p, c, r));
 
 	printf("O ponto P %s circulo formado por centro C de raio R.\n", resp);
-	printf("A area do circulo de centro C e raio R é de %f\n", areaCirc(r));
+	printf("O comprimento do circulo de centro C e raio R é de %f\n", compCirc(r));
 
 	printf("\n=========================================================\n\n");
 }
 
 void triangulo() {
+	Ponto x, y, z;
+	char resp[20];
+	
+	printf("\n=========================================================\n\n");
 
+	printf("Entre com as coordenadas do ponto X: ");
+	scanf("%d %d", &x.x, &x.y);
 
+	printf("Entre com as coordenadas do ponto Y: ");
+	scanf("%d %d", &y.x, &y.y);
 
+	printf("Entre com as coordenadas do ponto Z: ");
+	scanf("%d %d", &z.x, &z.y);
 
+	printf("\n=========================================================\n\n");
 
+	if(formaTri(x, y, z)>0) {
 
+		clasTri(x, y, z, resp);
+		printf("Os pontos X, Y e Z formam um triangulo %s.", resp);
+	}
+	else {
+		printf("Os pontos X, Y e Z não formam um triangulo.\n");	
+	}
+
+	printf("\n=========================================================\n\n");
 
 }
 
@@ -166,23 +188,58 @@ int inCirc(Ponto p, Ponto c, float r) {
 	}
 }
 
-float areaCirc(float r) {
+float compCirc(float r) {
 	double pi = 3.14;
 
-	return pi * pow((double) r, 2);
+	return 2 * pi * r;
 }
 
-void stringResp(char string[], int i) {
-
-	if(i>=1) {
-		if(i==1) {
-			strcpy(string, "esta dentro do");
+int formaTri(Ponto x, Ponto y, Ponto z) {
+	if(x.x == y.x && x.y == y.y) {
+		if(x.x == z.x && x.y == z.y) {
+			// 2 pontos iguais formam uma reta, 3 iguais um ponto
+			return 0; 
 		}
 		else {
-			strcpy(string, "pertence ao");
+			return 1;
 		}
 	}
 	else {
-		strcpy(string, "esta fora do");
+		return 1;
+	}
+}
+
+void clasTri(Ponto x, Ponto y, Ponto z, char str[]) {
+	double ladoA, ladoB, ladoC;
+
+	ladoA = sqrt(pow((double) x.x - y.x, 2.0) + pow((double) x.y - y.y, 2.0));
+	ladoB = sqrt(pow((double) x.x - z.x, 2.0) + pow((double) x.y - z.y, 2.0));
+	ladoC = sqrt(pow((double) z.x - y.x, 2.0) + pow((double) z.y - y.y, 2.0));
+
+	if(ladoA == ladoB && ladoB == ladoC) {
+		strcpy(str, "equilatero");
+	}
+	else {
+		if(ladoA == ladoB || ladoA == ladoC || ladoB == ladoC) {
+			strcpy(str, "isoceles");
+		}
+		else {
+			strcpy(str, "escaleno");
+		}
+	}
+}
+
+void stringResp(char str[], int i) {
+
+	if(i>=1) {
+		if(i==1) {
+			strcpy(str, "esta dentro do");
+		}
+		else {
+			strcpy(str, "pertence ao");
+		}
+	}
+	else {
+		strcpy(str, "esta fora do");
 	}
 }
