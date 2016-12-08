@@ -19,6 +19,7 @@ float compCirc(float r);
 int formaTri(Ponto x, Ponto y, Ponto z);
 void clasTri(Ponto x, Ponto y, Ponto z, char str[]);
 void stringResp(char str[], int i);
+double mod(Ponto x, Ponto y);
 
 int main() {
 	int op;
@@ -173,7 +174,7 @@ int areaRect(Ponto x, Ponto y) {
 int inCirc(Ponto p, Ponto c, float r) {
 	double modP;
 
-	modP = sqrt(pow((double) (c.x-p.x), 2.0) + pow((double) (c.y-p.y), 2.0));
+	modP = mod(c, p);
 
 	if(modP >= r) {
 		if(modP == r) {
@@ -195,14 +196,10 @@ float compCirc(float r) {
 }
 
 int formaTri(Ponto x, Ponto y, Ponto z) {
+	double a, b, c;
+
 	if(x.x == y.x && x.y == y.y) {
-		if(x.x == z.x && x.y == z.y) {
-			// 2 pontos iguais formam uma reta, 3 iguais um ponto
-			return 0; 
-		}
-		else {
-			return 1;
-		}
+		return 0;
 	}
 	else {
 		return 1;
@@ -212,9 +209,9 @@ int formaTri(Ponto x, Ponto y, Ponto z) {
 void clasTri(Ponto x, Ponto y, Ponto z, char str[]) {
 	double ladoA, ladoB, ladoC;
 
-	ladoA = sqrt(pow((double) x.x - y.x, 2.0) + pow((double) x.y - y.y, 2.0));
-	ladoB = sqrt(pow((double) x.x - z.x, 2.0) + pow((double) x.y - z.y, 2.0));
-	ladoC = sqrt(pow((double) z.x - y.x, 2.0) + pow((double) z.y - y.y, 2.0));
+	ladoA = mod(x, y);
+	ladoB = mod(x, z);
+	ladoC = mod(y, z);
 
 	if(ladoA == ladoB && ladoB == ladoC) {
 		strcpy(str, "equilatero");
@@ -242,4 +239,8 @@ void stringResp(char str[], int i) {
 	else {
 		strcpy(str, "esta fora do");
 	}
+}
+
+double mod(Ponto x, Ponto y) {
+	return sqrt(pow((double) x.x - y.x, 2.0) + pow((double) x.y - y.y, 2.0));
 }
